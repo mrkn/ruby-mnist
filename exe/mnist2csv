@@ -1,0 +1,45 @@
+#!/usr/bin/env ruby
+
+require 'bundler/setup'
+require 'mnist'
+
+require 'optparse'
+
+num_sample = nil
+
+opt = OptionParser.new
+opt.banner = "Usage: #{$0} [options] IMAGE_FILE LABEL_FILE"
+opt.version = Mnist::VERSION
+opt.separator ''
+opt.separator 'Options:'
+opt.on('-n', '--sample=N', Integer, 'The number of samples') {|v| num_sample = v }
+opt.parse!(ARGV)
+
+nrows, ncols, images = Mnist.load_images(ARGV[0])
+labels = Mnist.load_labels(ARGV[1])
+
+if images.length != labels.length
+  raise "The lengths of images and labels are not same"
+end
+
+print "y"
+(nrows*ncols).times do |i|
+  print ",x#{i}"
+end
+print "\r\n"
+
+indices = 0...labels.length
+indices = [*indices].sample(num_sample) if num_sample
+
+indices.each do |index|
+  label = labels[index]
+  print label
+
+  image = images[index]
+  pixels = image.unpack('C*')
+  pixels.each do |pixel|
+    print ",#{pixel}"
+  end
+
+  print "\r\n"
+end
