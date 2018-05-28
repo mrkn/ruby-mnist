@@ -1,8 +1,6 @@
 # Mnist
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/mnist`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Utility ruby gem for easily loading and parsing the MNIST Database of handwritten digits for machine learning purposes
 
 ## Installation
 
@@ -22,7 +20,18 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Load test and training data easily.
+
+```ruby
+minst = Mnist.read_data_sets('data') # auto download test and training archives and store them in /data
+images = minst.train.images
+labels = minst.train.labels
+
+#you can also iterate in batches
+
+train_images, train_labels = minst.train.next_batch(100)
+test_images, test_labels = minst.test.next_batch(100)
+```
 
 ## Development
 
